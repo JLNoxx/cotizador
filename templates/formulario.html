@@ -1,0 +1,119 @@
+<!-- Reemplaza tu contenido de formulario.html con esto -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generador de Cotizaciones</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; margin: 20px; line-height: 1.6; }
+        .producto { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; background: #f9f9f9; border-radius: 5px; }
+        button { padding: 10px 15px; color: white; border: none; cursor: pointer; margin: 5px; border-radius: 4px; font-weight: bold; transition: background-color 0.3s; }
+        .btn-azul { background: #2196F3; }
+        .btn-azul:hover { background: #0b7dda; }
+        .btn-verde { background: #4CAF50; }
+        .btn-verde:hover { background: #3e8e41; }
+        .btn-rojo { background: #f44336; }
+        .btn-rojo:hover { background: #d32f2f; }
+        input, select, textarea { padding: 8px; margin: 5px 0; width: 100%; box-sizing: border-box; border: 1px solid #ddd; border-radius: 4px; }
+        .form-group { margin-bottom: 15px; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        h1 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .producto h3 { margin-top: 0; color: #444; }
+    </style>
+</head>
+<body>
+    <h1>Generador de Cotizaciones</h1>
+    <form method="post" action="{% url 'generar_pdf' %}">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="cliente">Cliente:</label>
+            <input type="text" id="cliente" name="cliente" required>
+        </div>
+
+        <div class="form-group">
+            <label for="dni">DNI/RUC:</label>
+            <input type="text" id="dni" name="dni">
+        </div>
+
+        <div class="form-group">
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" name="direccion">
+        </div>
+
+        <div class="form-group">
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" name="telefono">
+        </div>
+
+        <div class="form-group">
+            <label for="provincia">Provincia:</label>
+            <input type="text" id="provincia" name="provincia">
+        </div>
+
+        <div class="form-group">
+            <label for="distrito">Distrito:</label>
+            <input type="text" id="distrito" name="distrito">
+        </div>
+
+        <div class="form-group">
+            <label for="observaciones">Observaciones:</label>
+            <textarea id="observaciones" name="observaciones" rows="3" placeholder="(Opcional)"></textarea>
+        </div>
+
+        <div class="botones">
+            <button type="button" onclick="agregarProducto()" class="btn-verde">➕ Agregar Producto</button>
+            <button type="button" onclick="removerProducto()" class="btn-rojo">➖ Quitar Producto</button>
+            <button type="submit" class="btn-azul">Generar PDF</button>
+        </div>
+
+        <div id="productos-container"></div>
+
+        
+    </form>
+
+    <script>
+        let contador = 0;
+
+        function agregarProducto() {
+            contador++;
+            const container = document.getElementById('productos-container');
+
+            const productoHTML = `
+            <div class="producto" id="producto-${contador}">
+                <h3>Producto ${contador}</h3>
+                <div class="form-group">
+                    <label>Nombre:</label>
+                    <input type="text" name="productos[${contador}][nombre]" required>
+                </div>
+                <div class="form-group">
+                    <label>Cantidad:</label>
+                    <input type="number" name="productos[${contador}][cantidad]" min="1" step="1" required>
+                </div>
+                <div class="form-group">
+                    <label>Precio Unitario (S/):</label>
+                    <input type="number" name="productos[${contador}][precio]" min="0.01" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Descuento (%):</label>
+                    <input type="number" name="productos[${contador}][dscto]" min="0" max="100" step="0.01">
+                </div>
+            </div>
+            `;
+            container.insertAdjacentHTML('beforeend', productoHTML);
+        }
+
+        function removerProducto() {
+            if (contador > 1) {
+                const producto = document.getElementById(`producto-${contador}`);
+                producto.remove();
+                contador--;
+            } else {
+                alert("Debe haber al menos un producto.");
+            }
+        }
+
+        window.onload = agregarProducto;
+    </script>
+</body>
+</html>

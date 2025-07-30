@@ -1,0 +1,402 @@
+/* RESET Y ESTILOS GENERALES */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: #333;
+    font-size: 13px;
+    line-height: 1.2;
+}
+
+/* SEPARADORES COMPLETOS (LÍNEA AZUL + BARRA GRIS) */
+.separador-completo {
+    margin: 10px 0;
+}
+
+.linea-azul {
+    height: 1px;
+    background-color: #0066cc;
+    width: 100%;
+    margin: 0;
+}
+
+.barra-gris-separadora {
+    height: 8px;
+    background-color: #f0f0f0;
+    width: 100%;
+    margin: 0;
+}
+
+/* HEADER COMPACTO */
+.contenedor-barra {
+    width: 100%;
+    position: relative;
+    margin-top: 5px;
+}
+
+.barra-gris {
+    background-color: #f0f0f0;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 2px 0;
+}
+
+.logo-izquierda {
+    position: absolute;
+    left: 2%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.logo-izquierda img {
+    width: 120px;
+    height: auto;
+    max-height: 500px;
+    object-fit: contain;
+}
+
+.contenido-derecha {
+    position: absolute;
+    right: 5%;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.texto-cotizacion {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 1px;
+}
+
+.fecha {
+    font-size: 12px;
+    color: #555;
+    font-style: italic;
+}
+
+/* ESTRUCTURA PRINCIPAL */
+.contenedor-principal {
+    padding: 0 10px;
+}
+
+/* SECCIONES DE INFORMACIÓN */
+.seccion {
+    margin-bottom: 8px;
+}
+
+.fila-info {
+    display: flex;
+    margin-bottom: 6px;
+    margin-left: 8px;
+}
+
+.etiqueta {
+    font-weight: bold;
+    width: 80px;
+}
+
+.valor {
+    flex-grow: 1;
+}
+
+/* CLIENTE/VENDEDOR */
+.cuadro-cliente {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    margin-left: 5px;
+}
+
+.fila-cliente {
+    display: table-row;
+}
+
+.celda {
+    display: table-cell;
+    padding: 3px 6px;
+    vertical-align: top;
+}
+
+.etiqueta-cliente {
+    font-weight: bold;
+    width: 12%;
+}
+
+.valor-cliente {
+    width: 38%;
+}
+
+.titulo-seccion, .detalle-cotizacion {
+    font-size: 14px;
+    margin: 4px 0 4px 5px;
+    color: #000;
+}
+
+/* CUENTAS/OBSERVACIONES */
+.cuadro-cliente-ad {
+    display: table;
+    width: 98%;
+    margin-left: 5px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.celda-titulo-cta, .celda-titulo-obs {
+    display: table-cell;
+    padding: 6px 8px;
+    font-weight: bold;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.celda-contenido-cta, .celda-contenido-obs {
+    display: table-cell;
+    padding: 8px;
+    border: 2px solid rgba(200, 200, 200, 0.3);
+    vertical-align: top;
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+.celda-contenido-cta {
+    width: 45%;
+}
+
+.celda-contenido-obs {
+    width: 45%;
+}
+
+.celda-espaciador {
+    display: table-cell;
+    width: 8%;
+}
+
+/* TABLA DE PRODUCTOS */
+.tabla-productos-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 8px 0 0 0;
+    max-width: 100%;
+}
+
+.tabla-productos {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    border: 1px solid #ddd;
+    table-layout: fixed;
+}
+
+.tabla-productos thead tr {
+    background-color: #f0f0f0;
+}
+
+.tabla-productos th,
+.tabla-productos td {
+    padding: 6px 5px;
+    border: 1px solid #ddd;
+    vertical-align: top;
+    text-align: left;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+/* Ajustes de anchos para que no se desborde */
+.tabla-productos th:nth-child(1),
+.tabla-productos td:nth-child(1) {
+    width: 36%;
+    white-space: normal;
+}
+
+.tabla-productos th:nth-child(2),
+.tabla-productos td:nth-child(2) {
+    width: 8%;
+    text-align: right;
+}
+
+.tabla-productos th:nth-child(3),
+.tabla-productos td:nth-child(3) {
+    width: 11%;
+    text-align: right;
+}
+
+.tabla-productos th:nth-child(4),
+.tabla-productos td:nth-child(4) {
+    width: 8%;
+    text-align: right;
+}
+
+.tabla-productos th:nth-child(5),
+.tabla-productos td:nth-child(5) {
+    width: 14%;
+    text-align: right;
+}
+
+.tabla-productos th:nth-child(6),
+.tabla-productos td:nth-child(6) {
+    width: 16%;
+    text-align: right;
+}
+
+/* TOTALES */
+.tabla-totales-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin: 5px 0 15px 0;
+}
+
+.tabla-totales {
+    width: auto;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-right: 17%;
+}
+
+.tabla-totales td {
+    padding: 4px 5px;
+    border: none;
+    background-color: transparent;
+}
+
+.espacio-columna {
+    width: 40%;
+    padding: 0 !important;
+}
+
+.texto-total {
+    text-align: right;
+    padding-right: 15px !important;
+    white-space: nowrap;
+}
+
+.valor-total {
+    text-align: right;
+    font-weight: bold;
+    width: 17%;
+    padding-right: 5px !important;
+}
+
+/* ESPACIADOR */
+.espacio-editable {
+    height: 25px;
+    background-color: transparent;
+}
+
+/* IMPRESIÓN */
+@media print {
+    @page {
+        size: A4;
+        margin: 0.5cm;
+    }
+
+    body {
+        font-size: 11px;
+        line-height: 1.1;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .linea-azul,
+    .barra-gris-separadora,
+    .barra-gris {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .linea-azul {
+        background-color: #0066cc !important;
+        height: 1px !important;
+    }
+
+    .barra-gris-separadora {
+        background-color: #f0f0f0 !important;
+        height: 6px !important;
+    }
+
+    .barra-gris {
+        height: 45px !important;
+    }
+
+    .separador-completo {
+        margin: 8px 0 !important;
+    }
+
+    .texto-cotizacion {
+        font-size: 14px !important;
+    }
+
+    .fecha {
+        font-size: 11px !important;
+    }
+
+    .contenedor-principal {
+        padding: 0 8px !important;
+    }
+
+    .tabla-productos {
+        border: 1px solid #ddd !important;
+        table-layout: fixed !important;
+        max-width: 100% !important;
+    }
+
+    .tabla-productos th,
+    .tabla-productos td {
+        border: 1px solid #ddd !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        word-break: break-word !important;
+    }
+
+    .tabla-totales {
+        margin-right: 15px !important;
+    }
+
+    .texto-total {
+        padding-right: 10px !important;
+    }
+
+    .valor-total {
+        width: 70px !important;
+    }
+
+    .espacio-editable {
+        height: 20px !important;
+    }
+
+    * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .tabla-productos-container {
+        overflow: visible !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tabla-productos {
+        min-width: 600px;
+    }
+}
+
+@media print {
+    .tabla-totales {
+        margin-right: 17% !important;
+    }
+
+    .texto-total {
+        padding-right: 10px !important;
+    }
+
+    .valor-total {
+        width: 17% !important;
+    }
+}

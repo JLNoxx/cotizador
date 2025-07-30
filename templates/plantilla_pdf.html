@@ -1,0 +1,182 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cotización</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header class="contenedor-barra">
+        <div class="linea-azul"></div>
+        <div class="barra-gris">
+            <div class="logo-izquierda">
+                <img src="{{ logo_src }}" alt="Logo" class="logo-impresion">
+            </div>
+            <div class="contenido-derecha">
+                <div class="texto-cotizacion">COTIZACION {{ cotizacion.numero }}</div>
+                <div class="fecha">Fecha: <span id="fecha-actual">{{ fecha }}</span></div>
+            </div>
+        </div>
+        <div class="linea-azul"></div>
+    </header>
+
+    <div class="espacio-editable"></div>
+
+    <main class="contenedor-principal">
+        <section class="seccion">
+            <div class="info-empresa">
+                <div class="fila-info">
+                    <span class="etiqueta">Empresa:</span>
+                    <span class="valor">AUTOMOTORES GILDEMEISTER</span>
+                </div>
+                <div class="fila-info">
+                    <span class="etiqueta">Sucursal:</span>
+                    <span class="valor">LA MARINA</span>
+                </div>
+                <div class="fila-info">
+                    <span class="etiqueta">Dirección:</span>
+                    <span class="valor">AV. LA MARINA 830</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="separador-completo">
+            <div class="linea-azul"></div>
+            <div class="barra-gris-separadora"></div>
+        </div>
+
+        <section class="seccion">
+            <h3 class="titulo-seccion"><i><b>CLIENTE</b></i></h3>
+            <div class="cuadro-cliente">
+                <div class="fila-cliente">
+                    <div class="celda etiqueta-cliente">Nombre:</div>
+                    <div class="celda valor-cliente">{{ cliente.nombre }}</div>
+                    <div class="celda etiqueta-cliente">País:</div>
+                    <div class="celda valor-cliente">{{ cliente.pais }}</div>
+                </div>
+                <div class="fila-cliente">
+                    <div class="celda etiqueta-cliente">DNI/RUC:</div>
+                    <div class="celda valor-cliente">{{ cliente.ruc }}</div>
+                    <div class="celda etiqueta-cliente">Provincia:</div>
+                    <div class="celda valor-cliente">{{ cliente.provincia }}</div>
+                </div>
+                <div class="fila-cliente">
+                    <div class="celda etiqueta-cliente">Dirección:</div>
+                    <div class="celda valor-cliente">{{ cliente.direccion }}</div>
+                    <div class="celda etiqueta-cliente">Distrito:</div>
+                    <div class="celda valor-cliente">{{ cliente.distrito }}</div>
+                </div>
+                <div class="fila-cliente">
+                    <div class="celda etiqueta-cliente">Teléfono:</div>
+                    <div class="celda valor-cliente">{{ cliente.telefono }}</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="separador-completo">
+            <div class="linea-azul"></div>
+            <div class="barra-gris-separadora"></div>
+        </div>
+
+        <section class="seccion">
+            <h3 class="titulo-seccion"><i><b>VENDEDOR</b></i></h3>
+            <div class="cuadro-cliente">
+                <div class="fila-cliente">
+                    <div class="celda etiqueta-cliente">Nombre:</div>
+                    <div class="celda valor-cliente">LUIS VELASQUEZ QUISPE</div>
+                    <div class="celda etiqueta-cliente">Correo:</div>
+                    <div class="celda valor-cliente">lvelasquez@gildemeister.pe</div>
+                </div>
+                <div class="fila-cliente">
+                    <div class="celda etiqueta-cliente">Teléfono:</div>
+                    <div class="celda valor-cliente">993573784</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="separador-completo">
+            <div class="linea-azul"></div>
+            <div class="barra-gris-separadora"></div>
+        </div>
+
+        <section class="seccion">
+            <div class="cuadro-cliente-ad">
+                <div class="fila-cliente">
+                    <div class="celda-titulo-cta">Cta Corriente</div>
+                    <div class="celda-espaciador"></div>
+                    <div class="celda-titulo-obs">Observaciones</div>
+                </div>
+                <div class="fila-cliente">
+                    <div class="celda-contenido-cta">
+                        BCP S/191-1163403-0-44<br>
+                        BCP S/ INTERBANCARIA002-191-001163403044-56<br>
+                        BBVA S/0011-0178-01-00020024<br>
+                        BBVA S/ INTERBANCARIA011-178-000100020024-14
+                    </div>
+                    <div class="celda-espaciador"></div>
+                    <div class="celda-contenido-obs">
+                        {{ observaciones|default:"-" }}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <h3 class="detalle-cotizacion"><i><b>DETALLE DE LA COTIZACIÓN</b></i></h3>
+
+        <div class="tabla-productos-container">
+            <table class="tabla-productos">
+                <thead>
+                    <tr>
+                        <th>Repuesto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unit.</th>
+                        <th>% Dscto</th>
+                        <th>Sub Total</th>
+                        <th>TOTAL inc IGV (S/.)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in productos %}
+                    <tr>
+                        <td>{{ p.nombre }}</td>
+                        <td>{{ p.cantidad }}</td>
+                        <td>{{ p.precio }}</td>
+                        <td>{{ p.descuento }}</td>
+                        <td>{{ p.subtotal }}</td>
+                        <td>{{ p.total }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tabla-totales-container">
+            <table class="tabla-totales">
+                <tbody>
+                    <tr>
+                        <td colspan="3" class="espacio-columna"></td>
+                        <td class="texto-total">SUBTOTAL:</td>
+                        <td class="valor-total">{{ subtotal }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="espacio-columna"></td>
+                        <td class="texto-total">Dscto(0.00%):</td>
+                        <td class="valor-total">0.00</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="espacio-columna"></td>
+                        <td class="texto-total">IGV (18%):</td>
+                        <td class="valor-total">{{ igv }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="espacio-columna"></td>
+                        <td class="texto-total">TOTAL:</td>
+                        <td class="valor-total">{{ total }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>
