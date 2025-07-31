@@ -10,7 +10,7 @@ body, html {
 
 /* SEPARADORES COMPLETOS (LÍNEA AZUL + BARRA GRIS) */
 .separador-completo {
-    margin: 10px 0;
+    margin: 15px 0;
 }
 
 .linea-azul {
@@ -85,7 +85,7 @@ body, html {
 
 /* SECCIONES DE INFORMACIÓN */
 .seccion {
-    margin-bottom: 8px;
+    margin-bottom: 15px;
 }
 
 .fila-info {
@@ -203,9 +203,10 @@ body, html {
     text-align: left;
     overflow-wrap: break-word;
     word-break: break-word;
+    page-break-inside: avoid;
 }
 
-/* Ajustes de anchos para que no se desborde */
+/* Ajustes de anchos */
 .tabla-productos th:nth-child(1),
 .tabla-productos td:nth-child(1) {
     width: 36%;
@@ -261,6 +262,7 @@ body, html {
     padding: 4px 5px;
     border: none;
     background-color: transparent;
+    page-break-inside: avoid;
 }
 
 .espacio-columna {
@@ -277,7 +279,7 @@ body, html {
 .valor-total {
     text-align: right;
     font-weight: bold;
-    width: 17%;
+    width: 80px !important;
     padding-right: 5px !important;
 }
 
@@ -351,6 +353,7 @@ body, html {
         word-wrap: break-word !important;
         overflow-wrap: break-word !important;
         word-break: break-word !important;
+        page-break-inside: avoid;
     }
 
     .tabla-totales {

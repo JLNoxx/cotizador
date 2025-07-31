@@ -30,25 +30,26 @@ def generar_pdf(request):
             observaciones=request.POST.get('observaciones') or '',
         )
 
-        productos_data = request.POST
-        for key in productos_data:
-            if key.startswith('productos[') and '][nombre]' in key:
-                index = key.split('[')[1].split(']')[0]
-                nombre = productos_data.get(f'productos[{index}][nombre]')
-                cantidad = float(productos_data.get(f'productos[{index}][cantidad]', 0))
-                precio = float(productos_data.get(f'productos[{index}][precio]', 0))
-                dscto_str = productos_data.get(f'productos[{index}][dscto]', '').strip()
-                descuento = float(dscto_str) if dscto_str else 0
-                subtotal = (cantidad * precio) * (1 - descuento / 100)
+        # Adaptado a los nuevos campos del formulario (listas planas)
+        nombres = request.POST.getlist('producto')
+        cantidades = request.POST.getlist('cantidad')
+        precios = request.POST.getlist('precio')
+        dsctos = request.POST.getlist('dscto')
 
-                Producto.objects.create(
-                    cotizacion=cotizacion,
-                    nombre=nombre,
-                    cantidad=cantidad,
-                    precio=precio,
-                    descuento=descuento,
-                    subtotal=subtotal
-                )
+        for nombre, cantidad, precio, dscto in zip(nombres, cantidades, precios, dsctos):
+            cantidad = float(cantidad)
+            precio = float(precio)
+            descuento = float(dscto) if dscto else 0
+            subtotal = (cantidad * precio) * (1 - descuento / 100)
+
+            Producto.objects.create(
+                cotizacion=cotizacion,
+                nombre=nombre,
+                cantidad=cantidad,
+                precio=precio,
+                descuento=descuento,
+                subtotal=subtotal
+            )
 
         return redirect('generar_pdf_id', id=cotizacion.id)
 
@@ -63,7 +64,7 @@ def generar_pdf_id(request, id):
     igv = subtotal * Decimal('0.18')
     total = subtotal + igv
 
-    # Leer y convertir el logo a base64
+    # Logo a base64
     logo_path = os.path.join(settings.BASE_DIR, 'static', 'images', 'logo.png')
     with open(logo_path, 'rb') as image_file:
         logo_base64 = base64.b64encode(image_file.read()).decode('utf-8')
@@ -96,7 +97,7 @@ def generar_pdf_id(request, id):
         'subtotal': f"{subtotal:.2f}",
         'igv': f"{igv:.2f}",
         'total': f"{total:.2f}",
-        'logo_src': logo_src,  # 👈 se envía el logo como string base64
+        'logo_src': logo_src,
     }
 
     template = get_template('plantilla_pdf.html')
@@ -107,7 +108,6 @@ def generar_pdf_id(request, id):
 
     html = html.replace('{% load static %}', '')
     html = html.replace("{% static 'css/styles.css' %}", f'file:///{css_path}')
-    # OJO: Ya no reemplazamos el logo aquí
 
     pdf_file = HTML(string=html, base_url=static_root).write_pdf(stylesheets=[CSS(css_path)])
 
