@@ -69,10 +69,8 @@ def generar_pdf_id(request, id):
         logo_base64 = base64.b64encode(image_file.read()).decode('utf-8')
         logo_src = f"data:image/png;base64,{logo_base64}"
 
-    # Ruta y contenido del CSS para embebido directo
-    css_path = os.path.join(settings.BASE_DIR, 'static', 'css', 'styles.css')
-    with open(css_path, 'r', encoding='utf-8') as css_file:
-        css_content = css_file.read()
+    # Ruta absoluta al CSS
+    css_path = os.path.join(settings.BASE_DIR, 'static', 'css', 'styles.css').replace('\\', '/')
 
     context = {
         'cotizacion': {'numero': cotizacion.numero},
@@ -104,13 +102,19 @@ def generar_pdf_id(request, id):
         'logo_src': logo_src,
     }
 
-    # Renderizado de plantilla y eliminación de etiquetas Django
+    # Renderiza plantilla
     template = get_template('plantilla_pdf.html')
-    html = template.render(context).replace('{% load static %}', '').replace("{% static 'css/styles.css' %}", '')
+    html = template.render(context)
 
-    # Generación de PDF con CSS embebido
-    pdf = HTML(string=html).write_pdf(stylesheets=[CSS(string=css_content)])
+    # Reemplaza el link del CSS (muy importante para producción)
+    html = html.replace(
+        '<link rel="stylesheet" href="file:///{{ css_absoluto }}">',
+        f'<link rel="stylesheet" href="file://{css_path}">'
+    )
 
-    response = HttpResponse(pdf, content_type='application/pdf')
+    # Genera el PDF
+    pdf_file = HTML(string=html).write_pdf(stylesheets=[CSS(css_path)])
+
+    response = HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = f'inline; filename="cotizacion_{cotizacion.numero}.pdf"'
     return response
