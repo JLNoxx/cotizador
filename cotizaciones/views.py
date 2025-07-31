@@ -63,13 +63,13 @@ def generar_pdf_id(request, id):
     igv = subtotal * Decimal('0.18')
     total = subtotal + igv
 
-    # Logo a base64
+    # Logo como base64
     logo_path = os.path.join(settings.BASE_DIR, 'static', 'images', 'logo.png')
     with open(logo_path, 'rb') as image_file:
         logo_base64 = base64.b64encode(image_file.read()).decode('utf-8')
         logo_src = f"data:image/png;base64,{logo_base64}"
 
-    # Ruta absoluta al CSS
+    # Ruta absoluta del CSS
     css_path = os.path.join(settings.BASE_DIR, 'static', 'css', 'styles.css').replace('\\', '/')
 
     context = {
@@ -100,21 +100,16 @@ def generar_pdf_id(request, id):
         'igv': f"{igv:.2f}",
         'total': f"{total:.2f}",
         'logo_src': logo_src,
+        'css_absoluto': css_path  # 👈 Esta línea era la que faltaba
     }
 
-    # Renderiza plantilla
     template = get_template('plantilla_pdf.html')
     html = template.render(context)
 
-    # Reemplaza el link del CSS (muy importante para producción)
-    html = html.replace(
-        '<link rel="stylesheet" href="file:///{{ css_absoluto }}">',
-        f'<link rel="stylesheet" href="file://{css_path}">'
-    )
-
-    # Genera el PDF
+    # Genera PDF
     pdf_file = HTML(string=html).write_pdf(stylesheets=[CSS(css_path)])
 
     response = HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = f'inline; filename="cotizacion_{cotizacion.numero}.pdf"'
     return response
+
