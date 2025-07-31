@@ -16,7 +16,6 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'noxx001.pythonanywhere.com']
 # Application definition
 INSTALLED_APPS = [
     'cotizaciones',
-    'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -79,6 +78,7 @@ USE_TZ = True
 # Archivos estáticos (CSS, imágenes, etc.)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Archivos multimedia (si decides usar imágenes subidas)
 MEDIA_URL = '/media/'
