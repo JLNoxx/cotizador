@@ -63,14 +63,16 @@ def generar_pdf_id(request, id):
     igv = subtotal * Decimal('0.18')
     total = subtotal + igv
 
-    # Logo como base64
+    # Logo a base64
     logo_path = os.path.join(settings.BASE_DIR, 'static', 'images', 'logo.png')
     with open(logo_path, 'rb') as image_file:
         logo_base64 = base64.b64encode(image_file.read()).decode('utf-8')
         logo_src = f"data:image/png;base64,{logo_base64}"
 
-    # Ruta absoluta del CSS
-    css_path = os.path.join(settings.BASE_DIR, 'static', 'css', 'styles.css').replace('\\', '/')
+    # Contenido del CSS como texto
+    css_path = os.path.join(settings.BASE_DIR, 'static', 'css', 'styles.css')
+    with open(css_path, 'r', encoding='utf-8') as css_file:
+        css_inline = css_file.read()
 
     context = {
         'cotizacion': {'numero': cotizacion.numero},
@@ -100,16 +102,20 @@ def generar_pdf_id(request, id):
         'igv': f"{igv:.2f}",
         'total': f"{total:.2f}",
         'logo_src': logo_src,
-        'css_absoluto': css_path  # 👈 Esta línea era la que faltaba
+        'css_inline': css_inline,  # Empotramos CSS
     }
 
     template = get_template('plantilla_pdf.html')
     html = template.render(context)
 
-    # Genera PDF
-    pdf_file = HTML(string=html).write_pdf(stylesheets=[CSS(css_path)])
+    # Quita link externo (por si aún existe en HTML renderizado)
+    html = html.replace('<link rel="stylesheet" href="file:///{{ css_absoluto }}">', '')
+    html = html.replace('<link rel="stylesheet" href="file://{{ css_absoluto }}">', '')
+    html = html.replace('<link rel="stylesheet" href="{{ css_absoluto }}">', '')
 
-    response = HttpResponse(pdf_file, content_type='application/pdf')
+    # Generar PDF
+    pdf = HTML(string=html).write_pdf()
+
+    response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = f'inline; filename="cotizacion_{cotizacion.numero}.pdf"'
     return response
-
