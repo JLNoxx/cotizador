@@ -12,7 +12,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'noxx001.pythonanywhere.com']
 
-
 # Application definition
 INSTALLED_APPS = [
     'cotizaciones',
@@ -39,7 +38,7 @@ ROOT_URLCONF = 'cotizador.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Carpeta global de plantillas
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,12 +74,12 @@ TIME_ZONE = 'America/Lima'
 USE_I18N = True
 USE_TZ = True
 
-# Archivos estáticos (CSS, imágenes, etc.)
+# Archivos estáticos
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Archivos multimedia (si decides usar imágenes subidas)
+# Archivos multimedia
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
