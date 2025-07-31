@@ -30,7 +30,6 @@ def generar_pdf(request):
             observaciones=request.POST.get('observaciones') or '',
         )
 
-        # Adaptado a los nuevos campos del formulario (listas planas)
         nombres = request.POST.getlist('producto')
         cantidades = request.POST.getlist('cantidad')
         precios = request.POST.getlist('precio')
@@ -70,6 +69,10 @@ def generar_pdf_id(request, id):
         logo_base64 = base64.b64encode(image_file.read()).decode('utf-8')
         logo_src = f"data:image/png;base64,{logo_base64}"
 
+    # Ruta absoluta del CSS
+    static_root = os.path.join(settings.BASE_DIR, 'static').replace('\\', '/')
+    css_path = os.path.join(static_root, 'css', 'styles.css').replace('\\', '/')
+
     context = {
         'cotizacion': {'numero': cotizacion.numero},
         'fecha': cotizacion.fecha.strftime("%d/%m/%Y"),
@@ -100,15 +103,17 @@ def generar_pdf_id(request, id):
         'logo_src': logo_src,
     }
 
+    # Render del HTML
     template = get_template('plantilla_pdf.html')
     html = template.render(context)
 
-    static_root = os.path.join(settings.BASE_DIR, 'static').replace('\\', '/')
-    css_path = os.path.join(static_root, 'css', 'styles.css').replace('\\', '/')
+    # Reemplazo seguro de la línea del CSS con path absoluto
+    html = html.replace(
+        '<link rel="stylesheet" href="{% static \'css/styles.css\' %}">',
+        f'<link rel="stylesheet" href="file://{css_path}">'
+    )
 
-    html = html.replace('{% load static %}', '')
-    html = html.replace("{% static 'css/styles.css' %}", f'file:///{css_path}')
-
+    # Generación del PDF
     pdf_file = HTML(string=html, base_url=static_root).write_pdf(stylesheets=[CSS(css_path)])
 
     response = HttpResponse(pdf_file, content_type='application/pdf')
