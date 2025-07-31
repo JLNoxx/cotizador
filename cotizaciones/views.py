@@ -69,10 +69,7 @@ def generar_pdf_id(request, id):
         logo_base64 = base64.b64encode(image_file.read()).decode('utf-8')
         logo_src = f"data:image/png;base64,{logo_base64}"
 
-    # Contenido del CSS como texto
-    css_path = os.path.join(settings.BASE_DIR, 'static', 'css', 'styles.css')
-    with open(css_path, 'r', encoding='utf-8') as css_file:
-        css_inline = css_file.read()
+    css_path = os.path.join(settings.BASE_DIR, 'static', 'css', 'styles.css').replace('\\', '/')
 
     context = {
         'cotizacion': {'numero': cotizacion.numero},
@@ -102,20 +99,16 @@ def generar_pdf_id(request, id):
         'igv': f"{igv:.2f}",
         'total': f"{total:.2f}",
         'logo_src': logo_src,
-        'css_inline': css_inline,  # Empotramos CSS
+        'css_absoluto': css_path,  # ✅ pasa css_absoluto directamente
     }
 
+    # Renderiza plantilla
     template = get_template('plantilla_pdf.html')
     html = template.render(context)
 
-    # Quita link externo (por si aún existe en HTML renderizado)
-    html = html.replace('<link rel="stylesheet" href="file:///{{ css_absoluto }}">', '')
-    html = html.replace('<link rel="stylesheet" href="file://{{ css_absoluto }}">', '')
-    html = html.replace('<link rel="stylesheet" href="{{ css_absoluto }}">', '')
+    # Genera el PDF
+    pdf_file = HTML(string=html).write_pdf(stylesheets=[CSS(css_path)])
 
-    # Generar PDF
-    pdf = HTML(string=html).write_pdf()
-
-    response = HttpResponse(pdf, content_type='application/pdf')
+    response = HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = f'inline; filename="cotizacion_{cotizacion.numero}.pdf"'
     return response
